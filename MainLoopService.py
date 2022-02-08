@@ -1,52 +1,75 @@
-#This is our main loop, using this we can grab our desired data
-
-#importing needed pacakges
-
 import os.path
 import xml.etree.ElementTree as ET
 import glob
 import time
 
 #importing all importer class like confi classes, csv class, xml class, text class
-from DatenGrabberClasses import CSV_Durchlesen,XML_Durchlesen, Text_Durchlesen, XmlCofiguration, TextConfiguration
-
+import CsvImporter
+from CsvImporter import CheckNewRows
+from XmlImporter import XmlImport
+from TextImpoter import TextImpot
+from XmlConfigClass import XmlCofiguration
+from TextConfigClass import TextConfiguration
 
 #Calling a configuration class file, now in this case it is XML type.
-#creating Instance for getting config paramaters
-Reading = XmlCofiguration.XmlCongfig('Xml files/Configuration file.xml')
-
+#creating Instance for getting config parameters
 
 # Extracting the data from configuration file
+XmlConfigRead = XmlCofiguration('Xml files/Configuration file.xml')
+ConfigDict= XmlConfigRead.XmlConfig()
 
-for key, value in Reading.items():
-    # now lets check what type of file type it is?
+timeout_start =time.time()
 
-    if value == 'CSV':
+# now lets check what type of file type it is?
 
-        # calling csv class and creating its instance
+#now we will detect type of file from config parameter
+while True:
 
-        CSV_Instance_01 = CSV_Durchlesen("C:\\Users\\har70707\\PycharmProjects\\IKTS_01\\csv files\\arizona-history.csv",
-                                         24,0.5,10, ['death','hospitalized'])
+    #first check for if it is csv
+    if ConfigDict['category'] == 'CSV':
 
-        CSV_Instance_01.CsvRead()
+        # start the loop if time is still permitted before triggered
+        while time.time() < timeout_start + int(ConfigDict['Trigger']):
 
-    if  value == 'Text':
+            # get the length of csv rows at T = 0 sec
 
-        # Getting each file from the folder of text files and extracting our data
+            NumberOfRowsBefore = CheckNewRows(ConfigDict['address'])
+            RowsAtTime01 = NumberOfRowsBefore.getLength()
+            print(RowsAtTime01)
 
-        for text_grabber in glob.glob("C:\\Users\\har70707\\PycharmProjects\\IKTS_01\\Text files\*"):
+            # check every( eg. 10 sec) that if there are any changes
+            time.sleep(int(ConfigDict['TimePeriod']))
 
-            # calling text class
-            Text_Instance_01 = Text_Durchlesen.TextRead(text_grabber)
+            # get the length of csv rows at T = (0 + 10 )seconds
+            NumberOfRowsAfter = CheckNewRows(ConfigDict['address'])
+            RowsAtTime02 = NumberOfRowsAfter.getLength()
+            print(RowsAtTime02)
 
-    if value == 'XML':
+            ChangeInRows = RowsAtTime02 - RowsAtTime01
 
-        # Getting each file from the folder of xml files and extracting our data
+            # if changes then, grab only new rows
+            if ChangeInRows > 0:
 
-        for xml_grabber in glob.glob("C:\\Users\\har70707\\PycharmProjects\\IKTS_01\\Xml input files\*"):
+                getChange = CheckNewRows(ConfigDict['address'])
+                getChange.ReadCsv(RowsAtTime01, eval(ConfigDict['Column']))
 
-            # calling xml class
-            XML_Instance_01 = XML_Durchlesen.XmlRead(xml_grabber)
+            else:
 
-    else:
-        pass
+                print('No new rows were added')
+
+        print('\n\nTime is triggered just now')
+        break
+
+    if ConfigDict['category'] == 'Text':
+
+        # calling text class
+        Text_Instance_01 = TextImpot(ConfigDict['address'])
+        Text_Instance_01.TextRead()
+        break
+
+    if ConfigDict['category'] == 'XML':
+
+        # calling xml class
+        XML_Instance_01 = XmlImport(ConfigDict['address'])
+        XML_Instance_01.XmlRead()
+        break
