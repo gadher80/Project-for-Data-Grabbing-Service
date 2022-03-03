@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<Mainloop>
+
+    <Global>
+        <SourceSections>Source01,Source02</SourceSections>
+        <ExitTriggerSections>ExitTrigger01</ExitTriggerSections>
+        <IDSourceSection>IDSource01</IDSourceSection>
+    </Global>
+
+    <IDSource01>
+        <Type>File</Type>
+        <Address>"c:\Temp\IDList.csv"</Address>
+    </IDSource01>
+
+    <Source01>
+        <Category>File</Category>
+        <Type>Text</Type>
+        <SubType>Xlsx</SubType>
+        <Content>Data</Content>
+        <Address>"c:\Temp\ExampleHeader.xlsx"</Address>
+        <StartLine>10</StartLine>
+        <StopLine>-1</StopLine>
+        <ReadMode>OneTime</ReadMode>
+        <TriggerSection>Trigger01</TriggerSection>
+    </Source01>
+
+    <Source02>
+        <Category>Database</Category>
+        <Type>Text</Type>
+        <SubType>CSV</SubType>
+        <Content>Data</Content>
+        <Address>'c:\Temp\ExampleData.csv'</Address>
+        <RowHeaderStart>1</RowHeaderStart>
+        <RowDataStart>2</RowDataStart>
+        <ColumnIDs>1000,1001,1002,1003,1004</ColumnIDs>
+        <Columns>1,2,3,4,5</Columns>
+        <HeaderIgnore>Yes</HeaderIgnore>
+        <ReadMode>Permanent</ReadMode>
+        <TriggerSection>Trigger02</TriggerSection>
+    </Source02>
+
+    <Trigger01>
+        <Mode>AtStart</Mode>
+    </Trigger01>
+
+    <Trigger02>
+        <Mode>Time</Mode>
+        <Period>10s</Period>
+        <ReadMode>AllNewData</ReadMode>
+        <ReturnType>List</ReturnType>
+    </Trigger02>
+
+    <Trigger03>
+        <Mode>Time</Mode>
+        <Period>10s</Period>
+        <ReadMode>LastLines</ReadMode>
+        <DataLength>5</DataLength>
+        <ReturnType>List</ReturnType>
+    </Trigger03>
+
+    <ExitTrigger01>
+        <Mode>KeyPress</Mode>
+        <Key>Any</Key>
+    </ExitTrigger01>
+
+</Mainloop>
