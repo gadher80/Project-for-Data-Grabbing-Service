@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<question qtype="Q_EXPLAIN_SPECIFIC" id="BULB_C_VOLTAGE_EXPLAIN_WHY1" module="FaultFinding" stype="EVALUATE">
+    <address>New_Arizona.csv</address>
+    <category>CSV</category>
+    <RowStart>12</RowStart>
+    <Row>50</Row>
+    <Column>['death','deathConfirmed']</Column>
+    <TimePeriod>10</TimePeriod>
+    <Trigger>120</Trigger>
+</question>
+
+
+

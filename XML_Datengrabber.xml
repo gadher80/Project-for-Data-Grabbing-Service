@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<question>
+  <File_config>
+    <Configuration category="CSV" Total_row="300" Total_column="5" Needed_row="100" Needed_column= "3">Data for better hospitality in Department 01 </Configuration>
+    <Configuration category="CSV" Total_row="200" Total_column="5" Needed_row="100" Needed_column= "3">Data for better hospitality in Department 02</Configuration>
+    <Configuration category="CSV" Total_row="200" Total_column="5" Needed_row="100" Needed_column= "3">Data for better hospitality in Department 03 </Configuration>
+    <Configuration category="CSV" Total_row="100" Total_column="5" Needed_row="100" Needed_column= "3">Data for better hospitality in Department 04</Configuration>
+    <Configuration category="CSV" Total_row="50" Total_column="5" Needed_row="100" Needed_column= "3">Data for better hospitality in Department 05</Configuration>
+  </File_config>
+</question>

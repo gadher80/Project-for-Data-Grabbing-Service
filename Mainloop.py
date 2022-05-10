@@ -1,36 +1,48 @@
+# sourcery skip: for-index-underscore, remove-redundant-pass
+import os.path
 import xml.etree.ElementTree as ET
+import glob
+import time
 
 #import CSV class
-from CSV_Extraction_02 import CSV_Durchlesen
-
-#import XML class
-from XML_Reading import XML_Durchlesen
-
-#import XML class
-from Text_Extraction import Text_Durchlesen
-
-#Creating a list with all different types of file types
-File_ART = ['CSV','TEXT','XML','MYSQL','EXCEL']
+from CSV_Extraction_02 import CSV_Durchlesen,XML_Durchlesen, Text_Durchlesen
 
 #Calling a configuration file, now in this case it is XML type.
-mytree = ET.parse('XML_Datengrabber.xml')
-myroot= mytree.getroot()
+for config_file_path in glob.glob("C:\\Users\\har70707\\PycharmProjects\\IKTS_01\\Xml files\*xml"):
+    print(f'Jetzt nehme ich Konfiguration {os.path.basename(config_file_path)} und untersuche auf der Konfiguration Parameter')
 
-#Extracting the data from configuration file
-for item in myroot.findall('File_config'):
-    Config_parameters = item.find('Configuration').attrib
-    #here we are getting our all required configuration parameter (now I just took 'Type of file')
+    mytree = ET.parse(config_file_path)
+    myroot= mytree.getroot()
 
-    for key,value in Config_parameters.items():
-        #now lets check what type of file type it is?
-        if value == 'CSV':
-            if value in File_ART:
-                CSV_Instance_01 = CSV_Durchlesen.reading_csv('alaska-history.csv') # calling csv class
-        elif value == 'Text':
-            if value in File_ART:
-                Text_Instance_01 = Text_Durchlesen.Text_read("Sample_Example.txt") # calling text class
-        elif value == 'XML':
-            if value in File_ART:
-                XML_Instance_01 = XML_Durchlesen.XML_read("XML_Beispiel.xml") # calling xml class
-        else:
-            pass
+    #Extracting the data from configuration file
+    #for Any_file in glob.glob("C:/Users/har70707/PycharmProjects/IKTS_01/*"):
+    for item in myroot.findall('File_config'):
+            Config_parameters = item.find('Configuration').attrib
+            print(Config_parameters)
+            #here we are getting our all required configuration parameter (now I just took 'Type of file')
+
+            for key,value in Config_parameters.items():
+                #now lets check what type of file type it is?
+                if value == 'CSV':
+
+                    #Getting each file from the folder of csv files and extracting our data
+
+                    for csv_grabber in glob.glob("C:\\Users\\har70707\\PycharmProjects\\IKTS_01\\csv files\*"):
+                        CSV_Instance_01 = CSV_Durchlesen.reading_csv(csv_grabber) # calling csv class
+
+                elif value == 'Text':
+
+                    #Getting each file from the folder of text files and extracting our data
+
+                    for text_grabber in glob.glob("C:\\Users\\har70707\\PycharmProjects\\IKTS_01\\Text files\*"):
+                        Text_Instance_01 = Text_Durchlesen.Text_read(text_grabber) # calling text class
+
+                elif value == 'XML':
+
+                    #Getting each file from the folder of xml files and extracting our data
+
+                    for xml_grabber in glob.glob("C:\\Users\\har70707\\PycharmProjects\\IKTS_01\\Xml input files\*"):
+                        XML_Instance_01 = XML_Durchlesen.XML_read(xml_grabber) # calling xml class
+
+                else:
+                    pass
